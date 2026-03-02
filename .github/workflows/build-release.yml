@@ -1,7 +1,7 @@
 name: Build and Release
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Ручной запуск
 
 jobs:
   build:
@@ -11,14 +11,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Generate version from commit
+      - name: Generate version from date
         id: version
         run: |
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          DATE=$(date +'%Y%m%d')
-          VERSION="${DATE}-${COMMIT_HASH}"
+          VERSION=$(date +'%Y.%m.%d-%H%M')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "Generated version: $VERSION"
+          echo "Genereted tag: $VERSION"
       
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -53,7 +51,7 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.VERSION }}
           name: Release v${{ steps.version.outputs.VERSION }}
-          body: "Автоматическая сборка от коммита ${{ github.sha }}"
+          body: "Автоматическая сборка расширения от $(date +'%d.%m.%Y %H:%M')"
           files: |
             extension.zip
         env:
