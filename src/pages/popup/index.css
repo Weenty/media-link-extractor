@@ -1,0 +1,9 @@
+body {
+  width: 500px;
+  height: auto;
+  margin: 0;
+
+  position: relative;
+
+  overflow-y: hidden;
+}
